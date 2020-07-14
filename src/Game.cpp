@@ -2,8 +2,11 @@
 #include "../lib/glm/glm.hpp"
 #include "./Game.hpp"
 #include "./Constants.h"
+#include "./AssetsManager.hpp"
+#include "./Components/SpriteComponent.hpp"
 #include "./Components/TransformComponents.hpp"
 EntityManager manager;
+AssetManager *Game::assetManager = new AssetManager(&manager);
 SDL_Renderer *Game::renderer;
 Game::Game()
 {
@@ -16,7 +19,7 @@ Game::~Game()
 
 bool Game::IsRunning() const
 {
-    return isRunning;
+    return this->isRunning;
 }
 
 void Game::Initialize(int width, int height)
@@ -53,8 +56,22 @@ void Game::Initialize(int width, int height)
 
 void Game::LoadLevel(int levelNumber)
 {
-    Entity &newEntity(manager.AddEntity("projectile"));
-    newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+
+    /* Start including new assets to the assetmanager list */
+
+    assetManager->AddTexture("tank-image", std::string("./assets/images/tank-big-right.png").c_str());
+    assetManager->AddTexture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());
+
+    /* Start including entities and also components to them */
+    Entity &tankEntity(manager.AddEntity("tank"));
+    tankEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+    tankEntity.AddComponent<SpriteComponent>("tank-image");
+
+    Entity &chopperEntity(manager.AddEntity("chopper"));
+    chopperEntity.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+    chopperEntity.AddComponent<SpriteComponent>("chopper-image");
+    //DEBUGGING
+    manager.ListEntities();
 }
 void Game::ProcessInput()
 {
