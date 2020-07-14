@@ -45,6 +45,8 @@ public:
             animations.emplace("RightAnimation", rightAnimation);
             animations.emplace("LeftAnimation", leftAnimation);
             animations.emplace("UpAnimation", upAnimation);
+            this->animationIndex = 0;
+            this->currentAnimationName = "DownAnimation";
         }
         else
         {
@@ -84,7 +86,7 @@ public:
     {
         if (isAnimated)
         {
-            sourceRectangle.x = (sourceRectangle.w * (SDL_GetTicks() / animationSpeed) % numFrames);
+            sourceRectangle.x = sourceRectangle.w * static_cast<int>((SDL_GetTicks() / animationSpeed) % numFrames);
         }
         sourceRectangle.y = animationIndex * transform->height;
         destinationRectangle.x = static_cast<int>(transform->position.x);
