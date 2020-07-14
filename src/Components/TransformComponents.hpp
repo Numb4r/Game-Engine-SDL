@@ -1,9 +1,11 @@
 #ifndef TRANSFORMCOMPONENTS_H
 #define TRANSFORMCOMPONENTS_H
+
 #include "../EntityManager.hpp"
 #include "../Game.hpp"
 #include "../../lib/glm/glm.hpp"
 #include <SDL2/SDL.h>
+
 class TransformComponent : public Component
 {
 public:
@@ -27,17 +29,6 @@ public:
     {
         position.x += velocity.x * deltaTime;
         position.y += velocity.y * deltaTime;
-    }
-    void Render() override
-    {
-        SDL_Rect transformRectangle = {
-            (int)position.x,
-
-            (int)position.y,
-            (int)width,
-            (int)height};
-        SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, 255);
-        SDL_RenderFillRect(Game::renderer, &transformRectangle);
     }
 };
 #endif
