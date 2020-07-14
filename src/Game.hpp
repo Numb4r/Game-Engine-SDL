@@ -1,12 +1,13 @@
-#pragma once
-// #ifndef GAME_H
-// #define GAME_H
+#ifndef GAME_H
+#define GAME_H
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "./Entity.hpp"
 #include "./EntityManager.hpp"
 #include "./Component.hpp"
+
+class AssetManager;
 class Game
 {
 private:
@@ -15,8 +16,8 @@ private:
 
 public:
     static SDL_Renderer *renderer;
+    static AssetManager *assetManager;
     void LoadLevel(int levelNumber);
-
     bool IsRunning() const;
     int ticksLastFrame;
     void Initialize(int width, int height);
@@ -27,4 +28,4 @@ public:
     Game();
     ~Game();
 };
-// #endif
+#endif
