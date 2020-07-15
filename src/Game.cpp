@@ -6,6 +6,7 @@
 #include "./Components/SpriteComponent.hpp"
 #include "./Components/TransformComponents.hpp"
 #include "./Components/KeyboardControlComponent.hpp"
+#include "./Components/ColliderComponent.hpp"
 #include "./Map.hpp"
 EntityManager manager;
 AssetManager *Game::assetManager = new AssetManager(&manager);
@@ -73,12 +74,14 @@ void Game::LoadLevel(int levelNumber)
     map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
     /* Start including entities and also components to them */
     Entity &tankEntity(manager.AddEntity("tank", ENEMY_LAYER));
-    tankEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+    tankEntity.AddComponent<TransformComponent>(150, 495, 5, 0, 32, 32, 1);
     tankEntity.AddComponent<SpriteComponent>("tank-image");
+    tankEntity.AddComponent<ColliderComponent>("enemy", 150, 395, 32, 32);
 
     player.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
     player.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
     player.AddComponent<KeyboardControlComponent>("up", "right", "down", "left", "space");
+    player.AddComponent<ColliderComponent>("player", 240, 106, 32, 32);
 
     Entity &radarEntity(manager.AddEntity("Radar", UI_LAYER));
     radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
@@ -122,6 +125,7 @@ void Game::Update()
     ticksLastFrame = SDL_GetTicks();
     manager.Update(deltaTime);
     HandleCameraMovement();
+    CheckCollisions();
 }
 void Game::Render()
 {
@@ -134,6 +138,14 @@ void Game::Render()
         manager.Render();
     SDL_RenderPresent(renderer);
 }
+void Game::CheckCollisions()
+{
+    std::string collisionTagType = manager.CheckEntityCollisions(player);
+    if (collisionTagType.compare("enemy") == 0)
+    {
+        isRunning = false;
+    }
+}
 void Game::HandleCameraMovement()
 {
     TransformComponent *mainPlayerTransform = player.GetComponent<TransformComponent>();
@@ -144,7 +156,7 @@ void Game::HandleCameraMovement()
     camera.y = camera.y < 0 ? 0 : camera.y;
 
     camera.x = camera.x > camera.w ? camera.w : camera.x;
-    camera.y = camera.x > camera.h ? camera.h : camera.y;
+    camera.y = camera.y > camera.h ? camera.h : camera.y;
 }
 void Game::Destroy()
 {
