@@ -44,7 +44,7 @@ public:
     template <typename T>
     bool HasComponent() const
     {
-        return !componentTypeMap.empty();
+        return componentTypeMap.count(&typeid(T));
     }
 };
 #endif
