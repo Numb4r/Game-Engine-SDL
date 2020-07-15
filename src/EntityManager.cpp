@@ -68,23 +68,66 @@ void EntityManager::ListEntities() const
         i++;
     }
 }
-std::string EntityManager::CheckEntityCollisions(Entity &myEntity) const
-{
-    ColliderComponent *myCollider = myEntity.GetComponent<ColliderComponent>();
-
-    for (auto &entity : entities)
+CollisionType EntityManager::CheckCollisions() const
+{   //TODO:FIX COLLISIONS
+    //THIS IS MESS,HOLY SHIT
+    for (auto &thisEntity : entities)
     {
-        if (entity->name.compare(myEntity.name) != 0 && entity->name.compare("Tile") != 0)
+        if (thisEntity->HasComponent<ColliderComponent>())
         {
-            if (entity->HasComponent<ColliderComponent>())
+            ColliderComponent *thisCollider = thisEntity->GetComponent<ColliderComponent>();
+            for (auto &thatEntity : entities)
             {
-                ColliderComponent *otherCollider = entity->GetComponent<ColliderComponent>();
-                if (Collision::CheckRectangleCollison(myCollider->collider, otherCollider->collider))
+                if (thisEntity->name.compare(thatEntity->name) != 0 && thatEntity->HasComponent<ColliderComponent>())
                 {
-                    return otherCollider->colliderTag;
+                    ColliderComponent *thatCollider = thatEntity->GetComponent<ColliderComponent>();
+                    if (Collision::CheckRectangleCollison(thisCollider->collider, thatCollider->collider))
+                    {
+                        if (thisCollider->colliderTag.compare("PLAYER") == 0)
+                        {
+                            if (thatCollider->colliderTag.compare("ENEMY") == 0)
+                            {
+                                return PLAYER_ENEMY_COLLISION;
+                            }
+                            if (thatCollider->colliderTag.compare("PROJECTILE") == 0)
+                            {
+                                return PLAYER_PROJECTILE_COLLISION;
+                            }
+                            if (thatCollider->colliderTag.compare("LEVEL_COMPLETE") == 0)
+                            {
+                                return PLAYER_LEVEL_COMPLETE_COLLISION;
+                            }
+                        }
+                        else if (
+                            thisCollider->colliderTag.compare("ENEMY") == 0 &&
+                            thatCollider->colliderTag.compare("FRIENDLY_PROJECTILE") == 0)
+                        {
+                            return ENEMY_PROJECTILE_COLLISION;
+                        }
+                    }
                 }
             }
         }
     }
-    return std::string();
+    return NO_COLLISION;
 }
+// std::string EntityManager::CheckEntityCollisions(Entity &myEntity) const
+// {
+//     ColliderComponent *myCollider = myEntity.GetComponent<ColliderComponent>();
+
+//     for (auto &entity : entities)
+//     {
+//         if (entity->name.compare(myEntity.name) != 0 && entity->name.compare("Tile") != 0)
+//         {
+//             if (entity->HasComponent<ColliderComponent>())
+//             {
+//                 ColliderComponent *otherCollider = entity->GetComponent<ColliderComponent>();
+//                 if (Collision::CheckRectangleCollison(myCollider->collider, otherCollider->collider))
+//                 {
+//                     return otherCollider->colliderTag;
+//                 }
+//             }
+//         }
+//     }
+//     return std::string();
+// }
