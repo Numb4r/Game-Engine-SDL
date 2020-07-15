@@ -18,6 +18,8 @@ public:
     static SDL_Renderer *renderer;
     static AssetManager *assetManager;
     static SDL_Event event;
+    static SDL_Rect camera;
+    void HandleCameraMovement();
     void LoadLevel(int levelNumber);
     bool IsRunning() const;
     int ticksLastFrame;
