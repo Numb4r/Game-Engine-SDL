@@ -1,17 +1,40 @@
+CXX	     := -g++
+CXXFLAGS := -w -std=c++14 
+LDFLAGS	 := -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -I"./lib/lua" -L"./lib/lua" -llua
+BUILD 	 := ./build
+OBJ_DIR  := $(BUILD)/objects
+APP_DIR  := $(BUILD)/
+TARGET   := app
+INCLUDE  := -Iinclude/
+SRC			 := $(wildcard src/*.cpp)
+
+OBJECTS := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
+
+all: build $(APP_DIR)/$(TARGET)
+
+$(OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $@ -c $<
+
+$(APP_DIR)/$(TARGET): $(OBJECTS)
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $(APP_DIR)/$(TARGET) $(OBJECTS)
+
+.PHONY: all build clean debug release run
+
 build:
-	g++ -w -std=c++14 -Wfatal-errors \
-	./src/*.cpp \
-	-o game \
-	-I"./lib/lua" \
-	-L"./lib/lua" \
-	-llua \
-	-lSDL2 \
-	-lSDL2_image \
-	-lSDL2_ttf \
-	-lSDL2_mixer;
+	@mkdir -p $(APP_DIR)
+	@mkdir -p $(OBJ_DIR)
+
+debug : CXXFLAGS += -DDEBUG -g
+debug: all
+
+release: CXXFLAGS += -O3
+release: all
 
 clean:
-	rm ./game;
+	-@rm -rvf $(OBJ_DIR)/*
+	-@rm -rvf $(APP_DIR)/*
 
 run:
-	./game;
+		./$(BUILD)/$(TARGET)
