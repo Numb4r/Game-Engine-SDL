@@ -20,6 +20,17 @@ void EntityManager::Update(float deltaTime)
     {
         entity->Update(deltaTime);
     }
+    DestroyInactiveEntities();
+}
+void EntityManager::DestroyInactiveEntities()
+{
+    for (int i = 0; i < entities.size(); i++)
+    {
+        if (!entities[i]->IsActive())
+        {
+            entities.erase(entities.begin() + i);
+        }
+    }
 }
 void EntityManager::Render()
 {
@@ -68,9 +79,10 @@ void EntityManager::ListEntities() const
         i++;
     }
 }
+// #include <iostream>
 CollisionType EntityManager::CheckCollisions() const
-{   //TODO:FIX COLLISIONS
-    //THIS IS MESS,HOLY SHIT
+{
+
     for (auto &thisEntity : entities)
     {
         if (thisEntity->HasComponent<ColliderComponent>())

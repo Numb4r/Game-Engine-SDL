@@ -20,6 +20,8 @@ public:
     std::vector<Entity *> GetEntitiesByLayer(LayerType layer) const;
     unsigned int GetEntityCount();
     void ListEntities() const;
+    void DestroyInactiveEntities();
+
     CollisionType CheckCollisions() const;
 };
 
