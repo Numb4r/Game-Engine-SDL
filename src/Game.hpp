@@ -29,6 +29,8 @@ public:
     void Update();
     void Render();
     void Destroy();
+    void ProcessGameOver();
+    void ProcessNextLevel(int levelNumber);
     Game();
     ~Game();
 };
