@@ -6,6 +6,7 @@
 #include "./Entity.hpp"
 #include "./EntityManager.hpp"
 #include "./Component.hpp"
+#include "../lib/lua/sol.hpp"
 
 class AssetManager;
 class Game
