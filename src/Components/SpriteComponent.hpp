@@ -73,9 +73,7 @@ public:
 
     void Initialize() override
     {
-        std::cout << "Initialize SpritesComponent:";
         transform = owner->GetComponent<TransformComponent>();
-        std::cout << transform->owner->name << std::endl;
         sourceRectangle.x = 0;
         sourceRectangle.y = 0;
         sourceRectangle.w = transform->width;
