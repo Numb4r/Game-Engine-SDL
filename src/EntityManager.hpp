@@ -14,12 +14,13 @@ public:
     void ClearData();
     void Update(float deltaTime);
     void Render();
-    bool HasNoEntities();
+    bool HasNoEntities() const;
     Entity &AddEntity(std::string entityName, LayerType layer);
     std::vector<Entity *> GetEntities() const;
     std::vector<Entity *> GetEntitiesByLayer(LayerType layer) const;
-    unsigned int GetEntityCount();
-    void ListEntities() const;
+    Entity *GetEntityByName(std::string entityName) const;
+    unsigned int GetEntityCount() const;
+    void ListAllEntities() const;
     void DestroyInactiveEntities();
 
     CollisionType CheckCollisions() const;

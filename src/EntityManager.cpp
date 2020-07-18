@@ -10,7 +10,7 @@ void EntityManager::ClearData()
         entity->Destroy();
     }
 }
-bool EntityManager::HasNoEntities()
+bool EntityManager::HasNoEntities() const
 {
     return entities.size() == 0;
 }
@@ -65,11 +65,11 @@ std::vector<Entity *> EntityManager::GetEntities() const
 {
     return entities;
 }
-unsigned int EntityManager::GetEntityCount()
+unsigned int EntityManager::GetEntityCount() const
 {
     return entities.size();
 }
-void EntityManager::ListEntities() const
+void EntityManager::ListAllEntities() const
 {
     unsigned int i = 0;
     for (auto &entity : entities)
@@ -123,23 +123,17 @@ CollisionType EntityManager::CheckCollisions() const
     }
     return NO_COLLISION;
 }
-// std::string EntityManager::CheckEntityCollisions(Entity &myEntity) const
-// {
-//     ColliderComponent *myCollider = myEntity.GetComponent<ColliderComponent>();
 
-//     for (auto &entity : entities)
-//     {
-//         if (entity->name.compare(myEntity.name) != 0 && entity->name.compare("Tile") != 0)
-//         {
-//             if (entity->HasComponent<ColliderComponent>())
-//             {
-//                 ColliderComponent *otherCollider = entity->GetComponent<ColliderComponent>();
-//                 if (Collision::CheckRectangleCollison(myCollider->collider, otherCollider->collider))
-//                 {
-//                     return otherCollider->colliderTag;
-//                 }
-//             }
-//         }
-//     }
-//     return std::string();
-// }
+Entity *EntityManager::GetEntityByName(std::string entityName) const
+{
+
+    for (auto *entity : entities)
+    {
+
+        if (entity->name.compare(entityName) == 0)
+        {
+            return entity;
+        };
+    }
+    return NULL;
+}
