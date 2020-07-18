@@ -27,3 +27,10 @@ TTF_Font *AssetManager::GetFont(std::string fontId)
 {
     return fonts[fontId];
 }
+void AssetManager::ListTextures()
+{
+    for (auto &texture : textures)
+    {
+        std::cout << texture.first << " : " << texture.second << std::endl;
+    }
+}
